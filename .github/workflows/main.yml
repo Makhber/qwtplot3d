@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2, 6.0.1]
+        qt_version: [5.15.2, 6.1.0]
 
     steps:
       - name: Checkout
@@ -102,7 +102,7 @@ jobs:
             make
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-qt5
+            mingw-w64-x86_64-qt6
             mingw-w64-x86_64-gl2ps
 
       - name: Configuring
