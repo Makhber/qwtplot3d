@@ -13,13 +13,40 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
       - name: Install prerequisties
         run: |
           sudo apt update
           sudo apt install -y --no-install-recommends \
-            qtbase5-dev \
-            libqt5opengl5-dev \
-            qttools5-dev \
+            libglu1-mesa-dev \
+            libxcb-util1 \
+            libxcb-glx0 \
+            libxcb-icccm4 \
+            libxcb-image0 \
+            libxcb-keysyms1 \
+            libxcb-randr0 \
+            libxcb-render-util0 \
+            libxcb-render0 \
+            libxcb-shape0 \
+            libxcb-shm0 \
+            libxcb-sync1 \
+            libxcb-xfixes0 \
+            libxcb-xinerama0 \
+            libxcb-xinput0 \
+            libxcb-xkb1 \
+            libxcb1 \
             libgl2ps-dev
 
       - name: Configuring
