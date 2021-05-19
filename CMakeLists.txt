@@ -71,7 +71,7 @@ set( SRCS
   "src/qwt3d_gridplot.cpp"
   "src/qwt3d_meshplot.cpp"
   "src/qwt3d_io_gl2ps.cpp"
-   )
+)
 
 set( HEADERS
   "include/qwt3d_color.h"
@@ -102,7 +102,7 @@ set( HEADERS
   "include/qwt3d_graphplot.h"
   "include/qwt3d_multiplot.h"
   "include/qwt3d_io_gl2ps.h"
-  )
+)
 configure_file( "include/qwt3d_version.h.in" "qwt3d_version.h" @ONLY )
 
 add_library( qwtplot3d ${SRCS} ${HEADERS} )
@@ -119,7 +119,6 @@ else()
   target_link_libraries( qwtplot3d Qt${QT_VERSION_MAJOR}::OpenGL )
 endif()
 
-
 target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
 
 if( NOT GL2PS_LIBRARY )
@@ -131,25 +130,30 @@ else()
   target_include_directories( qwtplot3d PRIVATE ${GL2PS_INCLUDE_DIR} )
 endif()
 
-if( WIN32 AND BUILD_SHARED_LIBS )
-  target_compile_definitions( qwtplot3d PRIVATE QWT3D_DLL QWT3D_MAKEDLL )
-endif()
-
-if( ${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR} )
-  add_subdirectory( examples )
+if( BUILD_SHARED_LIBS )
+  # DLL export/import
+  if( WIN32 )
+    target_compile_definitions( qwtplot3d PRIVATE QWT3D_DLL QWT3D_MAKEDLL )
+  endif()
+  # Install
+  install( TARGETS qwtplot3d
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  )
 endif()
 
 # Don't install qwtplot3d static library and headers if it is built as a subproject
 if( "${CMAKE_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}" )
+  add_subdirectory( examples )
+  if( BUILD_SHARED_LIBS )
+    # Library version
+    set_target_properties( qwtplot3d PROPERTIES
+      VERSION ${PROJECT_VERSION}
+      SOVERSION ${PROJECT_VERSION_MAJOR}
+    )
+  endif()
   install( TARGETS qwtplot3d
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qwtplot3d
-    )
-elseif( BUILD_SHARED_LIBS )
-  install( TARGETS qwtplot3d
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    )
+  )
 endif()
