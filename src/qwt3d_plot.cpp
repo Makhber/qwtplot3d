@@ -280,7 +280,7 @@ void Plot3D::setOrtho(bool val)
     ortho_ = val;
     update();
 
-    emit projectionChanged(val);
+    Q_EMIT projectionChanged(val);
 }
 
 /*!

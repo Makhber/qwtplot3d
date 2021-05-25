@@ -30,7 +30,7 @@ public:
 
     Qwt3D::SurfacePlot *dataWidget;
 
-public slots:
+public Q_SLOTS:
     void open();
     void openMesh();
 

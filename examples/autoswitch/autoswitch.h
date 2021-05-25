@@ -41,7 +41,7 @@ class Plot : public SurfacePlot
 public:
     Plot(QWidget *pw, int updateinterval);
 
-public slots:
+public Q_SLOTS:
     void rotate();
 };
 

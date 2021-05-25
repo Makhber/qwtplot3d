@@ -81,7 +81,7 @@ void SurfacePlot::setResolution(int res)
     if (initializedGL())
         update();
 
-    emit resolutionChanged(res);
+    Q_EMIT resolutionChanged(res);
 }
 
 void SurfacePlot::updateNormals()

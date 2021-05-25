@@ -24,7 +24,7 @@ public:
     Bar *bar;
     Qwt3D::SurfacePlot *plot;
 
-public slots:
+public Q_SLOTS:
     void setLevel(int);
     void setWidth(int);
     void barSlot();

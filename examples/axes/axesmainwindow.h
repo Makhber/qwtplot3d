@@ -25,7 +25,7 @@ public:
     Qwt3D::Function *rosenbrock;
     void resetTics();
 
-public slots:
+public Q_SLOTS:
     void setNumberGap(int gap);
     void setLabelGap(int gap);
 

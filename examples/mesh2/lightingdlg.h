@@ -66,7 +66,7 @@ public:
     Plot *plot;
     Qwt3D::Plot3D *dataPlot;
 
-public slots:
+public Q_SLOTS:
     void setDistance(int);
     void setEmission(int);
     void setDiff(int);

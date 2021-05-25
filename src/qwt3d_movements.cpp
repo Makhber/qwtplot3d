@@ -24,7 +24,7 @@ void Plot3D::setRotation(double xVal, double yVal, double zVal)
     zRot_ = zVal;
 
     update();
-    emit rotationChanged(xVal, yVal, zVal);
+    Q_EMIT rotationChanged(xVal, yVal, zVal);
 }
 
 /**
@@ -43,7 +43,7 @@ void Plot3D::setShift(double xVal, double yVal, double zVal)
     yShift_ = yVal;
     zShift_ = zVal;
     update();
-    emit shiftChanged(xVal, yVal, zVal);
+    Q_EMIT shiftChanged(xVal, yVal, zVal);
 }
 
 /**
@@ -65,7 +65,7 @@ void Plot3D::setViewportShift(double xVal, double yVal)
     yVPShift_ = yVal;
 
     update();
-    emit vieportShiftChanged(xVPShift_, yVPShift_);
+    Q_EMIT vieportShiftChanged(xVPShift_, yVPShift_);
 }
 
 /**
@@ -86,7 +86,7 @@ void Plot3D::setScale(double xVal, double yVal, double zVal)
     zScale_ = (zVal < DBL_EPSILON) ? DBL_EPSILON : zVal;
 
     update();
-    emit scaleChanged(xVal, yVal, zVal);
+    Q_EMIT scaleChanged(xVal, yVal, zVal);
 }
 
 /**
@@ -100,5 +100,5 @@ void Plot3D::setZoom(double val)
 
     zoom_ = (val < DBL_EPSILON) ? DBL_EPSILON : val;
     update();
-    emit zoomChanged(val);
+    Q_EMIT zoomChanged(val);
 }
