@@ -4,10 +4,10 @@ on: [pull_request,push]
 
 jobs:
   Ubuntu:
-
     runs-on: ubuntu-20.04
-
     name: Ubuntu
+    env:
+      QT_VERSION: 6.2.0
 
     steps:
       - name: Checkout
@@ -18,12 +18,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ../Qt
-          key: ${{ runner.os }}-QtCache
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.15.2
+          version: ${{ env.QT_VERSION }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       - name: Install prerequisties
@@ -47,6 +47,8 @@ jobs:
             libxcb-xinput0 \
             libxcb-xkb1 \
             libxcb1 \
+            libxkbcommon-dev \
+            libvulkan-dev \
             libgl2ps-dev
 
       - name: Configuring
@@ -66,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2, 6.1.0]
+        qt_version: [5.15.2, 6.2.0]
 
     steps:
       - name: Checkout
@@ -142,10 +144,10 @@ jobs:
           make -C build -j$(nproc)
 
   macos:
-
     runs-on: macos-latest
-
     name: macos
+    env:
+      QT_VERSION: 6.2.0
 
     steps:
       - name: Checkout
@@ -158,11 +160,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ../Qt
-          key: ${{ runner.os }}-QtCache
+          key: ${{ runner.os }}-QtCache-${{ env.QT_VERSION }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
+          version: ${{ env.QT_VERSION }}
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       - name: Install prerequisties
