@@ -1,6 +1,5 @@
 #include "qwt3d_coordsys.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 CoordinateSystem::CoordinateSystem(Triple first, Triple second, COORDSTYLE st)
@@ -128,9 +127,9 @@ void CoordinateSystem::draw()
 //! build convex hull (6 axes: 2 x, 2 y, 2 z) and choose one of them at a time for scales, labels etc.
 void CoordinateSystem::chooseAxes()
 {
-    vector<Triple> beg(axes.size());
-    vector<Triple> end(axes.size());
-    vector<Tuple> src(2 * axes.size());
+    std::vector<Triple> beg(axes.size());
+    std::vector<Triple> end(axes.size());
+    std::vector<Tuple> src(2 * axes.size());
 
     unsigned i;
     // collect axes viewport coordinates and initialize
@@ -148,7 +147,7 @@ void CoordinateSystem::chooseAxes()
         axes[i].setLabel(false);
     }
 
-    vector<unsigned> idx;
+    std::vector<unsigned> idx;
     convexhull2d(idx, src);
 
     int rem_x = -1;
@@ -189,7 +188,8 @@ void CoordinateSystem::chooseAxes()
                     if (rem_x >= 0) // schon zweite Achse der konvexen Huelle ?
                     {
                         // untere der beiden x Achsen
-                        double y = min(min(end[rem_x].y, end[i].y), min(beg[rem_x].y, beg[i].y));
+                        double y = std::min(std::min(end[rem_x].y, end[i].y),
+                                            std::min(beg[rem_x].y, beg[i].y));
                         choice_x = (y == beg[i].y || y == end[i].y) ? i : rem_x;
 
                         other_x = (choice_x == (int)i) ? rem_x : (int)i;
@@ -207,7 +207,8 @@ void CoordinateSystem::chooseAxes()
                 } else if (i == Y1 || i == Y2 || i == Y3 || i == Y4) {
                     if (rem_y >= 0) {
                         // untere der beiden y Achsen
-                        double y = min(min(end[rem_y].y, end[i].y), min(beg[rem_y].y, beg[i].y));
+                        double y = std::min(std::min(end[rem_y].y, end[i].y),
+                                            std::min(beg[rem_y].y, beg[i].y));
                         choice_y = (y == beg[i].y || y == end[i].y) ? i : rem_y;
 
                         other_y = (choice_y == (int)i) ? rem_y : (int)i;
@@ -224,7 +225,8 @@ void CoordinateSystem::chooseAxes()
                 } else if (i == Z1 || i == Z2 || i == Z3 || i == Z4) {
                     if (rem_z >= 0) {
                         // hintere der beiden z Achsen
-                        double z = max(max(end[rem_z].z, end[i].z), max(beg[rem_z].z, beg[i].z));
+                        double z = std::max(std::max(end[rem_z].z, end[i].z),
+                                            std::max(beg[rem_z].z, beg[i].z));
                         choice_z = (z == beg[i].z || z == end[i].z) ? i : rem_z;
 
                         other_z = (choice_z == (int)i) ? rem_z : (int)i;

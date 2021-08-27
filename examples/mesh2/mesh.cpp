@@ -1,6 +1,5 @@
 #include "functions.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 void createCone(Qwt3D::TripleField &conepos, Qwt3D::CellField &conecell)

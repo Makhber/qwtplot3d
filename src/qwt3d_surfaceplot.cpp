@@ -1,6 +1,5 @@
 #include "qwt3d_surfaceplot.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 /**
@@ -126,17 +125,17 @@ void SurfacePlot::createFloorData()
         The returned value is not affected by resolution(). The pair gives (columns,rows) for grid
 data , (number of cells,1) for free formed data (datatype() == POLYGON) and (0,0) else
 */
-pair<int, int> SurfacePlot::facets() const
+std::pair<int, int> SurfacePlot::facets() const
 {
     if (!hasData())
-        return pair<int, int>(0, 0);
+        return std::pair<int, int>(0, 0);
 
     if (actualData_p->datatype == Qwt3D::POLYGON)
-        return pair<int, int>(int(actualDataC_->cells.size()), 1);
+        return std::pair<int, int>(int(actualDataC_->cells.size()), 1);
     else if (actualData_p->datatype == Qwt3D::GRID)
-        return pair<int, int>(actualDataG_->columns(), actualDataG_->rows());
+        return std::pair<int, int>(actualDataG_->columns(), actualDataG_->rows());
     else
-        return pair<int, int>(0, 0);
+        return std::pair<int, int>(0, 0);
 }
 
 void SurfacePlot::createPoints()

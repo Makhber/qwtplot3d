@@ -11,7 +11,6 @@
 #include "axesmainwindow.h"
 #include "qwt3d_function.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 // Example function

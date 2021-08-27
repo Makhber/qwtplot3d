@@ -6,7 +6,6 @@
 #include "qwt3d_surfaceplot.h"
 #include "qwt3d_enrichment_std.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 void SurfacePlot::createDataG()
@@ -425,7 +424,7 @@ void SurfacePlot::Isolines2FloorG()
     int rows = actualDataG_->rows();
 
     Triple t[4];
-    vector<Triple> intersection;
+    std::vector<Triple> intersection;
 
     double lambda = 0;
 

@@ -5,7 +5,6 @@
 
 #include "qwt3d_plot.h"
 
-using namespace std;
 using namespace Qwt3D;
 
 /**
@@ -52,8 +51,8 @@ void Plot3D::mouseMoveEvent(QMouseEvent *e)
 void Plot3D::setRotationMouse(MouseState bstate, double accel, QPoint diff)
 {
     // Rotation
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = accel * 360 * diff.x() / w;
     double relyz = accel * 360 * diff.y() / h;
@@ -75,8 +74,8 @@ void Plot3D::setRotationMouse(MouseState bstate, double accel, QPoint diff)
 void Plot3D::setScaleMouse(MouseState bstate, double accel, QPoint diff)
 {
     // Scale
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = diff.x() * accel / w;
     relx = exp(relx) - 1;
@@ -88,23 +87,23 @@ void Plot3D::setScaleMouse(MouseState bstate, double accel, QPoint diff)
     double new_zscale = zScale();
 
     if (bstate == xscale_mstate_)
-        new_xscale = max(0.0, xScale() + relx);
+        new_xscale = std::max(0.0, xScale() + relx);
     if (bstate == yscale_mstate_)
-        new_yscale = max(0.0, yScale() - relyz);
+        new_yscale = std::max(0.0, yScale() - relyz);
     if (bstate == zscale_mstate_)
-        new_zscale = max(0.0, zScale() - relyz);
+        new_zscale = std::max(0.0, zScale() - relyz);
 
     setScale(new_xscale, new_yscale, new_zscale);
 
     if (bstate == zoom_mstate_)
-        setZoom(max(0.0, zoom() - relyz));
+        setZoom(std::max(0.0, zoom() - relyz));
 }
 
 void Plot3D::setShiftMouse(MouseState bstate, double accel, QPoint diff)
 {
     // Shift
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = diff.x() * accel / w;
     double relyz = diff.y() * accel / h;
@@ -134,9 +133,9 @@ void Plot3D::wheelEvent(QWheelEvent *e)
     step = exp(step) - 1;
 
     if (e->modifiers() & Qt::ShiftModifier)
-        setScale(xScale(), yScale(), max(0.0, zScale() + step));
+        setScale(xScale(), yScale(), std::max(0.0, zScale() + step));
     else
-        setZoom(max(0.0, zoom() + step));
+        setZoom(std::max(0.0, zoom() + step));
 }
 
 /**
@@ -213,8 +212,8 @@ void Plot3D::keyPressEvent(QKeyEvent *e)
 void Plot3D::setRotationKeyboard(KeyboardState kseq, double speed)
 {
     // Rotation
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = speed * 360 / w;
     double relyz = speed * 360 / h;
@@ -242,8 +241,8 @@ void Plot3D::setRotationKeyboard(KeyboardState kseq, double speed)
 void Plot3D::setScaleKeyboard(KeyboardState kseq, double speed)
 {
     // Scale
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = speed / w;
     relx = exp(relx) - 1;
@@ -255,31 +254,31 @@ void Plot3D::setScaleKeyboard(KeyboardState kseq, double speed)
     double new_zscale = zScale();
 
     if (kseq == xscale_kstate_[0])
-        new_xscale = max(0.0, xScale() + relx);
+        new_xscale = std::max(0.0, xScale() + relx);
     if (kseq == xscale_kstate_[1])
-        new_xscale = max(0.0, xScale() - relx);
+        new_xscale = std::max(0.0, xScale() - relx);
     if (kseq == yscale_kstate_[0])
-        new_yscale = max(0.0, yScale() - relyz);
+        new_yscale = std::max(0.0, yScale() - relyz);
     if (kseq == yscale_kstate_[1])
-        new_yscale = max(0.0, yScale() + relyz);
+        new_yscale = std::max(0.0, yScale() + relyz);
     if (kseq == zscale_kstate_[0])
-        new_zscale = max(0.0, zScale() - relyz);
+        new_zscale = std::max(0.0, zScale() - relyz);
     if (kseq == zscale_kstate_[1])
-        new_zscale = max(0.0, zScale() + relyz);
+        new_zscale = std::max(0.0, zScale() + relyz);
 
     setScale(new_xscale, new_yscale, new_zscale);
 
     if (kseq == zoom_kstate_[0])
-        setZoom(max(0.0, zoom() - relyz));
+        setZoom(std::max(0.0, zoom() - relyz));
     if (kseq == zoom_kstate_[1])
-        setZoom(max(0.0, zoom() + relyz));
+        setZoom(std::max(0.0, zoom() + relyz));
 }
 
 void Plot3D::setShiftKeyboard(KeyboardState kseq, double speed)
 {
     // Shift
-    double w = max(1, width());
-    double h = max(1, height());
+    double w = std::max(1, width());
+    double h = std::max(1, height());
 
     double relx = speed / w;
     double relyz = speed / h;

@@ -33,7 +33,6 @@
 #include "qwt3d_io_reader.h"
 
 using namespace Qwt3D;
-using namespace std;
 
 bool Mesh2MainWindow::connectA(const QObject *sender, const char *slot)
 {
@@ -784,7 +783,7 @@ bool Mesh2MainWindow::openColorMap(ColorVector &cv, QString fname)
     if (fname.isEmpty())
         return false;
 
-    ifstream file(QWT3DLOCAL8BIT(fname));
+    std::ifstream file(QWT3DLOCAL8BIT(fname));
 
     if (!file)
         return false;
