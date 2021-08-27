@@ -11,6 +11,7 @@
 
 #if defined(Q_OS_WIN)
 #if defined(_MSC_VER) /* MSVC Compiler */
+#define NOMINMAX
 #pragma warning(disable : 4251) // dll interface required for stl templates
 // pragma warning(disable: 4244) // 'conversion' conversion from 'type1' to 'type2', possible loss
 // of data
