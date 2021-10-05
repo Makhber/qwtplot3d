@@ -5,6 +5,8 @@ project( QwtPlot3D
   LANGUAGES CXX
   )
 
+set( CMAKE_MODULE_PATH "$CMAKE_MODULE_PATH" "${CMAKE_SOURCE_DIR}/cmake" )
+
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
 set( CMAKE_CXX_EXTENSIONS OFF )
@@ -53,11 +55,7 @@ endif()
 
 find_package( OpenGL COMPONENTS OpenGL REQUIRED )
 
-find_library( GL2PS_LIBRARY NAMES gl2ps )
-if( GL2PS_LIBRARY )
-  find_path ( GL2PS_INCLUDE_DIR NAMES gl2ps.h REQUIRED )
-  message( STATUS "Found GL2PS: ${GL2PS_LIBRARY}, with include: ${GL2PS_INCLUDE_DIR}" )
-endif()
+find_package( gl2ps )
 
 set( SRCS
   "src/qwt3d_axis.cpp"
@@ -133,13 +131,12 @@ endif()
 
 target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
 
-if( NOT GL2PS_LIBRARY )
+if( GL2PS_FOUND )
+  target_link_libraries( qwtplot3d gl2ps::gl2ps )
+else()
   enable_language( C )
   target_sources( qwtplot3d PRIVATE "3rdparty/gl2ps/gl2ps.c" "3rdparty/gl2ps/gl2ps.h" )
   target_include_directories( qwtplot3d PRIVATE "3rdparty/gl2ps" )
-else()
-  target_link_libraries( qwtplot3d ${GL2PS_LIBRARY} )
-  target_include_directories( qwtplot3d PRIVATE ${GL2PS_INCLUDE_DIR} )
 endif()
 
 if( BUILD_SHARED_LIBS )
