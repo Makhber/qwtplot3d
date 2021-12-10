@@ -25,7 +25,8 @@ jobs:
       - name: Configuring
         run: |
           mkdir build && cd build
-          cmake ..
+          cmake .. \
+            -DBUILD_SHARED_LIBS=ON
 
       - name: Building
         run: |
@@ -74,7 +75,10 @@ jobs:
       - name: Configuring
         run: |
           mkdir build; cd build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+          cmake .. `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DBUILD_SHARED_LIBS=ON `
+            -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
 
       - name: Building
         run: |
@@ -145,7 +149,8 @@ jobs:
       - name: Configuring
         run: |
           mkdir build && cd build
-          cmake ..
+          cmake .. \
+            -DBUILD_SHARED_LIBS=ON
 
       - name: Building
         run: |
