@@ -117,22 +117,22 @@ configure_file( "include/qwt3d_version.h.in" "qwt3d_version.h" @ONLY )
 
 add_library( qwtplot3d ${SRCS} ${HEADERS} )
 
-target_link_libraries( qwtplot3d
+target_link_libraries( qwtplot3d PUBLIC
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Gui
   OpenGL::GLU
   )
 
 if( QT_VERSION_MAJOR VERSION_GREATER_EQUAL 6 )
-  target_link_libraries( qwtplot3d Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
+  target_link_libraries( qwtplot3d PUBLIC Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
 else()
-  target_link_libraries( qwtplot3d Qt${QT_VERSION_MAJOR}::OpenGL )
+  target_link_libraries( qwtplot3d PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL )
 endif()
 
 target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
 
 if( GL2PS_FOUND )
-  target_link_libraries( qwtplot3d gl2ps::gl2ps )
+  target_link_libraries( qwtplot3d PUBLIC gl2ps::gl2ps )
 else()
   enable_language( C )
   target_sources( qwtplot3d PRIVATE "3rdparty/gl2ps/gl2ps.c" "3rdparty/gl2ps/gl2ps.h" )
@@ -142,7 +142,10 @@ endif()
 if( BUILD_SHARED_LIBS )
   # DLL export/import
   if( WIN32 )
-    target_compile_definitions( qwtplot3d PRIVATE QWT3D_DLL QWT3D_MAKEDLL )
+    target_compile_definitions( qwtplot3d
+      PUBLIC QWT3D_DLL
+      PRIVATE QWT3D_MAKEDLL
+    )
   endif()
   # Install
   install( TARGETS qwtplot3d
