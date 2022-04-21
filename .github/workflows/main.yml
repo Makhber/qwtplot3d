@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2, 6.2.0]
+        qt_version: [5.15.2, 6.3.0]
 
     steps:
       - name: Checkout
@@ -63,7 +63,6 @@ jobs:
         run: |
           & $(vcpkg fetch nuget | select -last 1) sources add `
           -source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" `
-          -storepasswordincleartext `
           -name "GitHub" `
           -username ${{ github.repository_owner }} `
           -password "${{ secrets.GITHUB_TOKEN }}"
@@ -85,11 +84,12 @@ jobs:
           cmake --build build --config Release -- -maxCpuCount
 
   MinGW-w64:
-
-    runs-on: windows-latest
-
-    name: MinGW-w64
-
+    runs-on: windows-2022
+    name: MSYS2 ${{ matrix.msystem }}
+    strategy:
+      fail-fast: false
+      matrix:
+        msystem: [UCRT64, CLANG64]
     defaults:
       run:
         shell: msys2 {0}
@@ -101,27 +101,27 @@ jobs:
       - name: Install MinGW-w64 packages
         uses: msys2/setup-msys2@v2
         with:
+          msystem: ${{ matrix.msystem }}
+          release: false
           update: true
-          install: >-
-            make
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-qt6-base
-            mingw-w64-x86_64-gl2ps
+          pacboy: >-
+            cmake:p
+            ninja:p
+            cc:p
+            qt6-base:p
+            gl2ps:p
 
       - name: Configuring
         run: |
           mkdir build && cd build
-          cmake .. -G"MSYS Makefiles"
+          cmake ..
 
       - name: Building
         run: |
-          make -C build -j$(nproc)
+          cmake --build build
 
   macos:
-
     runs-on: macos-latest
-
     name: macos
 
     steps:
