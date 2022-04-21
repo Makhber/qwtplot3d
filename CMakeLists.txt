@@ -5,6 +5,10 @@ project( QwtPlot3D
   LANGUAGES CXX
   )
 
+if(CMAKE_VERSION VERSION_LESS "3.21" AND "${CMAKE_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}")
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+endif()
+
 set( CMAKE_MODULE_PATH "$CMAKE_MODULE_PATH" "${CMAKE_CURRENT_SOURCE_DIR}/cmake" )
 
 set( CMAKE_CXX_STANDARD 17 )
@@ -155,7 +159,7 @@ if( BUILD_SHARED_LIBS )
 endif()
 
 # Don't install qwtplot3d static library and headers if it is built as a subproject
-if( "${CMAKE_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}" )
+if( PROJECT_IS_TOP_LEVEL )
   add_subdirectory( examples )
   if( BUILD_SHARED_LIBS )
     # Library version
