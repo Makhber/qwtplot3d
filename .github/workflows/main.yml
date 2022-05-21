@@ -4,14 +4,12 @@ on: [pull_request,push]
 
 jobs:
   Ubuntu:
-
-    runs-on: ubuntu-20.04
-
+    runs-on: ubuntu-22.04
     name: Ubuntu
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install prerequisties
         run: |
@@ -44,13 +42,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../Qt
+          path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache-${{ matrix.qt_version }}
 
       - name: Install Qt
@@ -96,7 +94,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install MinGW-w64 packages
         uses: msys2/setup-msys2@v2
@@ -121,20 +119,20 @@ jobs:
           cmake --build build
 
   macos:
-    runs-on: macos-latest
+    runs-on: macos-12
     name: macos
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Cache Qt
         id: cache-qt
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
-          path: ../Qt
+          path: ${{ github.workspace }}/Qt
           key: ${{ runner.os }}-QtCache
 
       - name: Install Qt
