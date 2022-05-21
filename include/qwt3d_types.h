@@ -209,7 +209,10 @@ struct QWT3D_EXPORT Triple
                 || !isPracticallyZero(z, t.z);
     }
 
-    bool operator==(Triple t) const { return !operator!=(t); }
+    bool operator==(Triple t) const
+    {
+        return !operator!=(t);
+    }
 
     double length() const
     {

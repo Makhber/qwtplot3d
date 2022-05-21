@@ -25,7 +25,7 @@ public:
 
     MouseState(Qt::MouseButton mb, Qt::KeyboardModifiers km = Qt::NoModifier) : mb_(mb), km_(km) { }
 
-    bool operator==(const MouseState &ms) { return mb_ == ms.mb_ && km_ == ms.km_; }
+    bool operator==(const MouseState &ms) const { return mb_ == ms.mb_ && km_ == ms.km_; }
 
     bool operator!=(const MouseState &ms) { return !operator==(ms); }
 
@@ -43,7 +43,7 @@ public:
     {
     }
 
-    bool operator==(const KeyboardState &ms) { return key_ == ms.key_ && km_ == ms.km_; }
+    bool operator==(const KeyboardState &ms) const { return key_ == ms.key_ && km_ == ms.km_; }
 
     bool operator!=(const KeyboardState &ms) { return !operator==(ms); }
 
