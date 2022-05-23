@@ -55,7 +55,7 @@ elseif( Qt5_FOUND )
   set( QT_VERSION_MAJOR 5 )
 endif()
 
-if( QT_VERSION_MAJOR VERSION_EQUAL 6 )
+if( ${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6 )
   find_package( Qt6 COMPONENTS Gui OpenGLWidgets REQUIRED )
 else()
   find_package( Qt5 COMPONENTS Gui OpenGL REQUIRED )
@@ -126,15 +126,15 @@ configure_file( "include/qwt3d_version.h.in" "qwt3d_version.h" @ONLY )
 add_library( qwtplot3d ${SRCS} ${HEADERS} )
 
 target_link_libraries( qwtplot3d PUBLIC
-  Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Gui
+  Qt::Core
+  Qt::Gui
   OpenGL::GLU
   )
 
-if( QT_VERSION_MAJOR VERSION_GREATER_EQUAL 6 )
-  target_link_libraries( qwtplot3d PUBLIC Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
+if( Qt6_FOUND )
+  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGLWidgets )
 else()
-  target_link_libraries( qwtplot3d PUBLIC Qt${QT_VERSION_MAJOR}::OpenGL )
+  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGL )
 endif()
 
 target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
