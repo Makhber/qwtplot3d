@@ -9,7 +9,7 @@ Axis::Axis()
 
 Axis::~Axis() { }
 
-Axis::Axis(Triple beg, Triple end)
+Axis::Axis(const Triple &beg, const Triple &end)
 {
     init();
     setPosition(beg, end);
@@ -132,8 +132,8 @@ void Axis::drawLabel()
     if (!drawLabel_)
         return;
 
-    Triple diff = end() - begin();
-    Triple center = begin() + diff / 2;
+    Triple diff = last() - first();
+    Triple center = first() + diff / 2;
 
     Triple bnumber = biggestNumberString();
     //	double fac = 6*(second()-first()).length() / 100;
@@ -238,7 +238,8 @@ void Axis::drawTics()
         double t = (scale_->majors_p[i] - start_) / (stop_ - start_);
         nadir = beg_ + t * runningpoint;
         majorpos_.push_back(drawTic(nadir, lmaj_));
-        drawTicLabel(nadir + 1.2 * lmaj_ * orientation_, i);
+        Triple pos_ = nadir + 1.2 * lmaj_ * orientation_;
+        drawTicLabel(pos_, i);
     }
     setDeviceLineWidth(minLineWidth_);
     for (i = 0; i != scale_->minors_p.size(); ++i) {
@@ -248,7 +249,7 @@ void Axis::drawTics()
     }
 }
 
-void Axis::drawTicLabel(Triple pos, int mtic)
+void Axis::drawTicLabel(const Triple &pos, int mtic)
 {
     if (!drawNumbers_ || (mtic < 0))
         return;
@@ -285,7 +286,7 @@ void Axis::setNumberFont(QFont const &font)
     numberfont_ = font;
 }
 
-void Axis::setNumberColor(RGBA col)
+void Axis::setNumberColor(const RGBA &col)
 {
     numbercolor_ = col;
 }
@@ -315,7 +316,7 @@ void Axis::setLabelPosition(const Triple &pos, Qwt3D::ANCHOR an)
 }
 
 //! Sets color for label
-void Axis::setLabelColor(RGBA col)
+void Axis::setLabelColor(const RGBA &col)
 {
     label_.setColor(col);
 }
@@ -325,13 +326,11 @@ Triple Axis::biggestNumberString()
     Triple ret;
     size_t size = markerLabel_.size();
 
-    double width, height;
-
     for (unsigned i = 0; i != size; ++i) {
-        width = fabs(
+        double width = fabs(
                 (World2ViewPort(markerLabel_[i].second()) - World2ViewPort(markerLabel_[i].first()))
                         .x);
-        height = fabs(
+        double height = fabs(
                 (World2ViewPort(markerLabel_[i].second()) - World2ViewPort(markerLabel_[i].first()))
                         .y);
 

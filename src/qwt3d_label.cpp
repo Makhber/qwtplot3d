@@ -76,7 +76,7 @@ example:
 
 \endverbatim
 */
-void Label::setPosition(Triple pos, ANCHOR a)
+void Label::setPosition(const Triple &pos, ANCHOR a)
 {
     anchor_ = a;
     pos_ = pos;

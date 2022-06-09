@@ -76,9 +76,9 @@ protected:
     double normalLength_p;
     int normalQuality_p;
 
-    virtual void calculateHull();
-    virtual void createData();
-    virtual void createEnrichment(Qwt3D::Enrichment &p);
+    virtual void calculateHull() override;
+    virtual void createData() override;
+    virtual void createEnrichment(Qwt3D::Enrichment &p) override;
     virtual void createFloorData();
     void createNormals();
     void createPoints();

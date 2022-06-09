@@ -155,7 +155,8 @@ void SurfacePlot::readIn(GridData &gdata, Triple **data, unsigned int columns, u
 {
     gdata.setSize(columns, rows);
 
-    ParallelEpiped range(Triple(DBL_MAX, DBL_MAX, DBL_MAX), Triple(-DBL_MAX, -DBL_MAX, -DBL_MAX));
+    Triple minv_(DBL_MAX, DBL_MAX, DBL_MAX), maxv_(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+    ParallelEpiped range(minv_, maxv_);
 
     /* fill out the vertex array for the mesh. */
     for (unsigned i = 0; i != columns; ++i) {
@@ -206,10 +207,10 @@ void SurfacePlot::readIn(GridData &gdata, double **data, unsigned int columns, u
                 tmin = data[i][j];
         }
     }
-    ParallelEpiped hull =
-            ParallelEpiped(Triple(gdata.vertices[0][0][0], gdata.vertices[0][0][1], tmin),
-                           Triple(gdata.vertices[gdata.columns() - 1][gdata.rows() - 1][0],
-                                  gdata.vertices[gdata.columns() - 1][gdata.rows() - 1][1], tmax));
+    Triple minv_(gdata.vertices[0][0][0], gdata.vertices[0][0][1], tmin),
+            maxv_(gdata.vertices[gdata.columns() - 1][gdata.rows() - 1][0],
+                  gdata.vertices[gdata.columns() - 1][gdata.rows() - 1][1], tmax);
+    ParallelEpiped hull = ParallelEpiped(minv_, maxv_);
 
     gdata.setHull(hull);
 }
@@ -452,7 +453,7 @@ void SurfacePlot::Isolines2FloorG()
                               actualDataG_->vertices[i][j + step][1],
                               actualDataG_->vertices[i][j + step][2]);
 
-                double diff = 0;
+                double diff {};
                 for (int m = 0; m != 4; ++m) {
                     int mm = (m + 1) % 4;
                     if ((val >= t[m].z && val <= t[mm].z) || (val >= t[mm].z && val <= t[m].z)) {

@@ -8,8 +8,8 @@ GridMapping::GridMapping()
     plotwidget_p = 0;
     setMesh(0, 0);
     setDomain(0, 0, 0, 0);
-    restrictRange(ParallelEpiped(Triple(-DBL_MAX, -DBL_MAX, -DBL_MAX),
-                                 Triple(DBL_MAX, DBL_MAX, DBL_MAX)));
+    Triple minv_(-DBL_MAX, -DBL_MAX, -DBL_MAX), maxv_(DBL_MAX, DBL_MAX, DBL_MAX);
+    restrictRange(ParallelEpiped(minv_, maxv_));
 }
 
 void GridMapping::setMesh(unsigned int columns, unsigned int rows)

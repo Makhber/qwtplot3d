@@ -22,25 +22,25 @@ public:
     void setStyle(Qwt3D::COORDSTYLE s, Qwt3D::AXIS frame_1 = Qwt3D::X1,
                   Qwt3D::AXIS frame_2 = Qwt3D::Y1, Qwt3D::AXIS frame_3 = Qwt3D::Z1);
     Qwt3D::COORDSTYLE style() const { return style_; } //!< Return style oft the coordinate system
-    void
-    setPosition(Qwt3D::Triple first,
-                Qwt3D::Triple second); //!< first == front_left_bottom, second == back_right_top
+    void setPosition(
+            const Qwt3D::Triple &first,
+            const Qwt3D::Triple &second); //!< first == front_left_bottom, second == back_right_top
 
-    void setAxesColor(Qwt3D::RGBA val); //!< Set common color for all axes
+    void setAxesColor(const Qwt3D::RGBA &val); //!< Set common color for all axes
     //! Set common font for all axis numberings
     void setNumberFont(QString const &family, int pointSize, int weight = QFont::Normal,
                        bool italic = false);
     //! Set common font for all axis numberings
     void setNumberFont(QFont const &font);
     //! Set common color for all axis numberings
-    void setNumberColor(Qwt3D::RGBA val);
+    void setNumberColor(const Qwt3D::RGBA &val);
     void setStandardScale(); //!< Sets an linear axis with real number items
 
     void adjustNumbers(int val); //!< Fine tunes distance between axis numbering and axis body
     void adjustLabels(int val); //!< Fine tunes distance between axis label and axis body
 
     //! Sets color for the grid lines
-    void setGridLinesColor(Qwt3D::RGBA val) { gridlinecolor_ = val; }
+    void setGridLinesColor(const Qwt3D::RGBA &val) { gridlinecolor_ = val; }
 
     //! Set common font for all axis labels
     void setLabelFont(QString const &family, int pointSize, int weight = QFont::Normal,
@@ -48,7 +48,7 @@ public:
     //! Set common font for all axis labels
     void setLabelFont(QFont const &font);
     //! Set common color for all axis labels
-    void setLabelColor(Qwt3D::RGBA val);
+    void setLabelColor(const Qwt3D::RGBA &val);
 
     //! Set line width for tic marks and axes
     void setLineWidth(double val, double majfac = 0.9, double minfac = 0.5);
@@ -56,7 +56,7 @@ public:
     void setTicLength(double major, double minor);
 
     //! Switch autoscaling of axes
-    void setAutoScale(bool val = true);
+    void setAutoScale(const bool &val = true);
 
     Qwt3D::Triple first() const { return first_; }
     Qwt3D::Triple second() const { return second_; }
@@ -67,7 +67,7 @@ public:
     void setLineSmooth(bool val = true) { smooth_ = val; } //!< draw smooth axes
     bool lineSmooth() const { return smooth_; } //!< smooth axes ?
 
-    void draw();
+    void draw() override;
 
     //! Defines whether a grid between the major and/or minor tics should be drawn
     void setGridLines(bool majors, bool minors, int sides = Qwt3D::NOSIDEGRID);
@@ -90,8 +90,8 @@ private:
     void autoDecorateExposedAxis(Axis &ax, bool left);
     void drawMajorGridLines(); //!< Draws a grid between the major tics on the site
     void drawMinorGridLines(); //!< Draws a grid between the minor tics on the site
-    void drawMajorGridLines(Qwt3D::Axis &, Qwt3D::Axis &); //! Helper
-    void drawMinorGridLines(Qwt3D::Axis &, Qwt3D::Axis &); //! Helper
+    void drawMajorGridLines(const Qwt3D::Axis &, const Qwt3D::Axis &); //! Helper
+    void drawMinorGridLines(const Qwt3D::Axis &, const Qwt3D::Axis &); //! Helper
     void recalculateAxesTics();
 
     bool autodecoration_;

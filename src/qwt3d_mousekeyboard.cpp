@@ -78,9 +78,9 @@ void Plot3D::setScaleMouse(MouseState bstate, double accel, QPoint diff)
     double h = std::max(1, height());
 
     double relx = diff.x() * accel / w;
-    relx = exp(relx) - 1;
+    relx = expm1(relx);
     double relyz = diff.y() * accel / h;
-    relyz = exp(relyz) - 1;
+    relyz = expm1(relyz);
 
     double new_xscale = xScale();
     double new_yscale = yScale();
@@ -130,7 +130,7 @@ void Plot3D::wheelEvent(QWheelEvent *e)
     double accel = 0.05;
 
     double step = accel * e->angleDelta().y() / WHEEL_DELTA;
-    step = exp(step) - 1;
+    step = expm1(step);
 
     if (e->modifiers() & Qt::ShiftModifier)
         setScale(xScale(), yScale(), std::max(0.0, zScale() + step));
@@ -245,9 +245,9 @@ void Plot3D::setScaleKeyboard(KeyboardState kseq, double speed)
     double h = std::max(1, height());
 
     double relx = speed / w;
-    relx = exp(relx) - 1;
+    relx = expm1(relx);
     double relyz = speed / h;
-    relyz = exp(relyz) - 1;
+    relyz = expm1(relyz);
 
     double new_xscale = xScale();
     double new_yscale = yScale();

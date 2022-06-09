@@ -43,8 +43,11 @@ Plot::Plot(QWidget *parent) : SurfacePlot(parent)
     sphere.create();
 
     reset();
-    assignMouse(Qt::LeftButton, Qt::RightButton, Qt::LeftButton, Qt::NoButton, Qt::NoButton,
-                Qt::NoButton, Qt::NoButton, Qt::NoButton, Qt::NoButton);
+    assignMouse(Qwt3D::MouseState(Qt::LeftButton), Qwt3D::MouseState(Qt::RightButton),
+                Qwt3D::MouseState(Qt::LeftButton), Qwt3D::MouseState(Qt::NoButton),
+                Qwt3D::MouseState(Qt::NoButton), Qwt3D::MouseState(Qt::NoButton),
+                Qwt3D::MouseState(Qt::NoButton), Qwt3D::MouseState(Qt::NoButton),
+                Qwt3D::MouseState(Qt::NoButton));
 
     stick = (Pointer *)addEnrichment(Pointer(0.05));
     stick->setPos(0, 0, 1);

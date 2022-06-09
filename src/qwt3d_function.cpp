@@ -70,7 +70,7 @@ bool Function::create()
     if (!plotwidget_p) {
         fprintf(stderr, "Function: no valid Plot3D Widget assigned");
     } else {
-        ((SurfacePlot *)plotwidget_p)
+        dynamic_cast<SurfacePlot *>(plotwidget_p)
                 ->loadFromData(data, umesh_p, vmesh_p, minu_p, maxu_p, minv_p, maxv_p);
     }
 

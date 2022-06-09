@@ -254,7 +254,7 @@ GLint Qwt3D::drawDevicePixels(GLsizei width, GLsizei height, GLenum format, GLen
     if (format != GL_RGBA || type != GL_UNSIGNED_BYTE)
         return GL2PS_ERROR;
 
-    GLfloat *convertedpixel = (GLfloat *)malloc(3 * width * height * sizeof(GLfloat));
+    GLfloat *convertedpixel = static_cast<GLfloat *>(malloc(3 * width * height * sizeof(GLfloat)));
     if (!convertedpixel)
         return GL2PS_ERROR;
 

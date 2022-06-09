@@ -60,10 +60,10 @@ class QWT3D_EXPORT LinearScale : public Scale
     friend class qwt3d_ptr<Scale>;
 
 protected:
-    int autoscale(double &a, double &b, double start, double stop, int ivals);
+    int autoscale(double &a, double &b, double start, double stop, int ivals) override;
     //! Returns a new heap based object utilized from qwt3d_ptr
-    Scale *clone() const { return new LinearScale(*this); }
-    void calculate();
+    Scale *clone() const override { return new LinearScale(*this); }
+    void calculate() override;
     LinearAutoScaler autoscaler_p;
 };
 
@@ -74,13 +74,13 @@ class QWT3D_EXPORT LogScale : public Scale
     friend class qwt3d_ptr<Scale>;
 
 protected:
-    QString ticLabel(unsigned int idx) const;
-    void setMinors(int val);
+    QString ticLabel(unsigned int idx) const override;
+    void setMinors(int val) override;
     //! Standard ctor
     LogScale();
     //! Returns a new heap based object utilized from qwt3d_ptr
-    Scale *clone() const { return new LogScale; }
-    void calculate();
+    Scale *clone() const override { return new LogScale; }
+    void calculate() override;
 
 private:
     void setupCounter(double &k, int &step);

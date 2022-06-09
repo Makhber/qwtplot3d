@@ -40,7 +40,7 @@ double floorExt(int &exponent, double x, std::vector<double> &sortedmantissi)
 */
 [[maybe_unused]] double floor125(int &exponent, double x)
 {
-    std::vector<double> m(2);
+    std::vector<double> m(3);
     m[0] = 1;
     m[1] = 2;
     m[2] = 5;
@@ -63,7 +63,7 @@ LinearAutoScaler::LinearAutoScaler()
 val mantisse A increasing ordered vector of values representing
 mantisse values between 1 and 9.
 */
-LinearAutoScaler::LinearAutoScaler(std::vector<double> &mantisse)
+LinearAutoScaler::LinearAutoScaler(const std::vector<double> &mantisse)
 {
     init(0, 1, 1);
     if (mantisse.empty()) {
@@ -182,18 +182,13 @@ int LinearAutoScaler::execute(double &a, double &b, double start, double stop, i
         return intervals_;
     }
 
-    int prev_ival, prev_l_ival, prev_r_ival;
-    double prev_anchor;
-    double prev_c;
-    int prev_n;
-
     while (1) {
-        prev_c = c;
-        prev_n = n;
-        prev_anchor = anchor;
-        prev_ival = ival;
-        prev_l_ival = l_ival;
-        prev_r_ival = r_ival;
+        double prev_c = c;
+        int prev_n = n;
+        double prev_anchor = anchor;
+        int prev_ival = ival;
+        int prev_l_ival = l_ival;
+        int prev_r_ival = r_ival;
 
         if (int(c) == 1) {
             c = mantissi_.back();

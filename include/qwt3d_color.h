@@ -43,8 +43,9 @@ class QWT3D_EXPORT StandardColor : public Color
 public:
     //! Initializes with data and set up a ColorVector with a size of 100 z values (default);
     explicit StandardColor(Qwt3D::Plot3D *data, unsigned size = 100);
-    Qwt3D::RGBA operator()(double x, double y,
-                           double z) const; //!< Receives z-dependend color from ColorVector
+    Qwt3D::RGBA
+    operator()(double x, double y,
+               double z) const override; //!< Receives z-dependend color from ColorVector
     void setColorVector(Qwt3D::ColorVector const &cv);
     void reset(unsigned size = 100); //!< Resets the standard colors;
     void setAlpha(double a); //!< Sets unitary alpha value for all colors
@@ -54,7 +55,7 @@ public:
             Creates a color vector used by ColorLegend. This is essentially a copy from the internal
        used vector. \return The vector created
     */
-    Qwt3D::ColorVector &createVector(Qwt3D::ColorVector &vec)
+    Qwt3D::ColorVector &createVector(Qwt3D::ColorVector &vec) override
     {
         vec = colors_;
         return vec;

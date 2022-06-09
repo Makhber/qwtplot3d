@@ -14,12 +14,12 @@ public:
     CrossHair();
     CrossHair(double rad, double linewidth, bool smooth, bool boxed);
 
-    Qwt3D::Enrichment *clone() const { return new CrossHair(*this); }
+    Qwt3D::Enrichment *clone() const override { return new CrossHair(*this); }
 
     void configure(double rad, double linewidth, bool smooth, bool boxed);
-    void drawBegin();
-    void drawEnd();
-    void draw(Qwt3D::Triple const &);
+    void drawBegin() override;
+    void drawEnd() override;
+    void draw(Qwt3D::Triple const &) override;
 
 private:
     bool boxed_, smooth_;
@@ -34,12 +34,12 @@ public:
     Dot();
     Dot(double pointsize, bool smooth);
 
-    Qwt3D::Enrichment *clone() const { return new Dot(*this); }
+    Qwt3D::Enrichment *clone() const override { return new Dot(*this); }
 
     void configure(double pointsize, bool smooth);
-    void drawBegin();
-    void drawEnd();
-    void draw(Qwt3D::Triple const &);
+    void drawBegin() override;
+    void drawEnd() override;
+    void draw(Qwt3D::Triple const &) override;
 
 private:
     bool smooth_;
@@ -55,10 +55,10 @@ public:
     Cone(double rad, unsigned quality);
     ~Cone();
 
-    Qwt3D::Enrichment *clone() const { return new Cone(*this); }
+    Qwt3D::Enrichment *clone() const override { return new Cone(*this); }
 
     void configure(double rad, unsigned quality);
-    void draw(Qwt3D::Triple const &);
+    void draw(Qwt3D::Triple const &) override;
 
 private:
     GLUquadricObj *hat;
@@ -80,14 +80,14 @@ public:
     Arrow();
     ~Arrow();
 
-    Qwt3D::Enrichment *clone() const { return new Arrow(*this); }
+    Qwt3D::Enrichment *clone() const override { return new Arrow(*this); }
 
     void configure(int segs, double relconelength, double relconerad, double relstemrad);
     void setQuality(int val) { segments_ = val; } //!< Set the number of faces for the arrow
-    void draw(Qwt3D::Triple const &);
+    void draw(Qwt3D::Triple const &) override;
 
-    void setTop(Qwt3D::Triple t) { top_ = t; }
-    void setColor(Qwt3D::RGBA rgba) { rgba_ = rgba; }
+    void setTop(const Qwt3D::Triple &t) { top_ = t; }
+    void setColor(const Qwt3D::RGBA &rgba) { rgba_ = rgba; }
 
 private:
     GLUquadricObj *hat;

@@ -3,7 +3,11 @@
 
 using namespace Qwt3D;
 
-ParametricSurface::ParametricSurface() : GridMapping() { }
+ParametricSurface::ParametricSurface() : GridMapping()
+{
+    uperiodic_ = false;
+    vperiodic_ = false;
+}
 
 ParametricSurface::ParametricSurface(SurfacePlot &pw) : GridMapping()
 {
@@ -78,7 +82,8 @@ bool ParametricSurface::create()
         }
     }
 
-    ((SurfacePlot *)plotwidget_p)->loadFromData(data, umesh_p, vmesh_p, uperiodic_, vperiodic_);
+    dynamic_cast<SurfacePlot *>(plotwidget_p)
+            ->loadFromData(data, umesh_p, vmesh_p, uperiodic_, vperiodic_);
 
     for (i = 0; i < umesh_p; i++) {
         delete[] data[i];

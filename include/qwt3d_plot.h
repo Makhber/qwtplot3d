@@ -25,7 +25,7 @@ public:
 
     QPixmap renderPixmap(int w = 0, int h = 0, bool useContext = false);
     void updateData(); //!< Recalculate data
-    void createCoordinateSystem(Qwt3D::Triple beg, Qwt3D::Triple end);
+    void createCoordinateSystem(const Qwt3D::Triple &beg, const Qwt3D::Triple &end);
     Qwt3D::CoordinateSystem *coordinates()
     {
         return &coordinates_p;
@@ -83,12 +83,12 @@ public:
         smoothdatamesh_p = val;
     } //!< Enables/disables smooth data mesh lines. Default is false
     bool smoothDataMesh() const { return smoothdatamesh_p; } //!< True if mesh antialiasing is on
-    void setBackgroundColor(Qwt3D::RGBA rgba); //!< Sets widgets background color
+    void setBackgroundColor(const Qwt3D::RGBA &rgba); //!< Sets widgets background color
     Qwt3D::RGBA backgroundRGBAColor() const
     {
         return bgcolor_;
     } //!< Returns the widgets background color
-    void setMeshColor(Qwt3D::RGBA rgba); //!< Sets color for data mesh
+    void setMeshColor(const Qwt3D::RGBA &rgba); //!< Sets color for data mesh
     Qwt3D::RGBA meshColor() const { return meshcolor_; } //!< Returns color for data mesh
     void setMeshLineWidth(double lw); //!< Sets line width for data mesh
     double meshLineWidth() const { return meshLineWidth_; } //!< Returns line width for data mesh
@@ -112,7 +112,7 @@ public:
     void setTitlePosition(double rely, double relx = 0.5, Qwt3D::ANCHOR = Qwt3D::TopCenter);
     void setTitleFont(const QString &family, int pointSize, int weight = QFont::Normal,
                       bool italic = false);
-    void setTitleColor(Qwt3D::RGBA col) { title_.setColor(col); } //!< Set caption color
+    void setTitleColor(const Qwt3D::RGBA &col) { title_.setColor(col); } //!< Set caption color
     void setTitle(const QString &title)
     {
         title_.setString(title);
@@ -235,7 +235,7 @@ protected:
     virtual void createEnrichments();
 
     void createCoordinateSystem();
-    void setHull(Qwt3D::ParallelEpiped p) { hull_ = p; }
+    void setHull(const Qwt3D::ParallelEpiped &p) { hull_ = p; }
 
     bool initializedGL() const { return initializedGL_; }
 

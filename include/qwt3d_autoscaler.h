@@ -30,10 +30,10 @@ class QWT3D_EXPORT LinearAutoScaler : public AutoScaler
 
 protected:
     LinearAutoScaler();
-    explicit LinearAutoScaler(std::vector<double> &mantisses);
+    explicit LinearAutoScaler(const std::vector<double> &mantisses);
     //! Returns a new heap based object utilized from qwt3d_ptr
-    AutoScaler *clone() const { return new LinearAutoScaler(*this); }
-    int execute(double &a, double &b, double start, double stop, int ivals);
+    AutoScaler *clone() const override { return new LinearAutoScaler(*this); }
+    int execute(double &a, double &b, double start, double stop, int ivals) override;
 
 private:
     double start_, stop_;

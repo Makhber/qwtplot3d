@@ -33,7 +33,7 @@ void SurfacePlot::createDataC()
     GLStateBewarer sb(GL_POLYGON_OFFSET_FILL, true);
     setDevicePolygonOffset(polygonOffset(), 1.0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    int idx = 0;
+    int idx {};
     if (plotStyle() != WIREFRAME) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_QUADS);
 
@@ -148,7 +148,7 @@ void SurfacePlot::Isolines2FloorC()
                 nodes.push_back(actualDataC_->nodes[actualDataC_->cells[i][j]]);
             }
 
-            double diff = 0;
+            double diff {};
             for (unsigned m = 0; m != cellnodes; ++m) {
                 unsigned mm = (m + 1) % cellnodes;
                 if ((val >= nodes[m].z && val <= nodes[mm].z)
@@ -213,7 +213,7 @@ void SurfacePlot::createNormalsC()
     double diag = (actualData_p->hull().maxVertex - actualData_p->hull().minVertex).length()
             * normalLength();
 
-    RGBA col;
+    // RGBA col;
     arrow.assign(*this);
     arrow.drawBegin();
     for (unsigned i = 0; i != actualDataC_->normals.size(); ++i) {
@@ -249,9 +249,9 @@ bool SurfacePlot::loadFromData(TripleField const &data, CellField const &poly)
     //  normals for the moment
     Triple n, u, v;
     for (i = 0; i < poly.size(); ++i) {
-        if (poly[i].size() < 3)
-            n = Triple(0, 0, 0);
-        else {
+        if (poly[i].size() >= 3)
+            /*n = Triple(0, 0, 0);
+        else {*/
             for (size_t j = 0; j < poly[i].size(); ++j) {
                 size_t jj = (j + 1) % poly[i].size();
                 size_t pjj = (j) ? j - 1 : poly[i].size() - 1;
@@ -260,13 +260,13 @@ bool SurfacePlot::loadFromData(TripleField const &data, CellField const &poly)
                 n = normalizedcross(u, v);
                 actualDataC_->normals[poly[i][j]] += n;
             }
-        }
     }
     for (i = 0; i != actualDataC_->normals.size(); ++i) {
         actualDataC_->normals[i].normalize();
     }
 
-    ParallelEpiped hull(Triple(DBL_MAX, DBL_MAX, DBL_MAX), Triple(-DBL_MAX, -DBL_MAX, -DBL_MAX));
+    Triple minv_(DBL_MAX, DBL_MAX, DBL_MAX), maxv_(-DBL_MAX, -DBL_MAX, -DBL_MAX);
+    ParallelEpiped hull(minv_, maxv_);
 
     for (i = 0; i != data.size(); ++i) {
         if (data[i].x < hull.minVertex.x)

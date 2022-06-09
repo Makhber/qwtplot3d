@@ -56,8 +56,8 @@ public:
     bool setFormat(QString const &format);
 
 private:
-    IO::Functor *clone() const;
-    bool operator()(Plot3D *plot, QString const &fname);
+    IO::Functor *clone() const override;
+    bool operator()(Plot3D *plot, QString const &fname) override;
 
     GLint gl2ps_format_;
     bool formaterror_;

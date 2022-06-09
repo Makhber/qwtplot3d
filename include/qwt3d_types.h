@@ -209,7 +209,7 @@ struct QWT3D_EXPORT Triple
                 || !isPracticallyZero(z, t.z);
     }
 
-    bool operator==(Triple t) const
+    bool operator==(const Triple &t) const
     {
         return !operator!=(t);
     }
@@ -274,7 +274,7 @@ struct QWT3D_EXPORT ParallelEpiped
             minv -> minVertex\n
             maxv -> maxVertex\n
     */
-    ParallelEpiped(Triple minv, Triple maxv) : minVertex(minv), maxVertex(maxv) { }
+    ParallelEpiped(Triple &minv, Triple &maxv) : minVertex(minv), maxVertex(maxv) { }
 
     Triple minVertex;
     Triple maxVertex;
@@ -293,7 +293,7 @@ struct QWT3D_EXPORT FreeVector
             b -> base\n
             e -> top\n
     */
-    FreeVector(Triple b, Triple t) : base(b), top(t) { }
+    FreeVector(Triple &b, Triple &t) : base(b), top(t) { }
 
     Triple base;
     Triple top;
@@ -357,8 +357,8 @@ public:
     int columns() const;
     int rows() const;
 
-    void clear(); //!< destroy content
-    bool empty() const { return vertices.empty(); }
+    void clear() override; //!< destroy content
+    bool empty() const override { return vertices.empty(); }
     void
     setSize(unsigned int columns,
             unsigned int rows); //!< destroys content and set new size, elements are uninitialized
@@ -384,8 +384,8 @@ public:
     CellData() { datatype = Qwt3D::POLYGON; }
     ~CellData() { clear(); }
 
-    void clear(); //!< destroy content
-    bool empty() const { return cells.empty(); }
+    void clear() override; //!< destroy content
+    bool empty() const override { return cells.empty(); }
 
     Triple const &operator()(unsigned cellnumber, unsigned vertexnumber);
 

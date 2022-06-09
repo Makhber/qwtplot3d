@@ -34,7 +34,7 @@ public:
     ColorLegend(); //!< Standard constructor
 
     void
-    draw(); //!< Draws the object. You should not use this explicitely - the function is called by updateGL().
+    draw() override; //!< Draws the object. You should not use this explicitely - the function is called by updateGL().
 
     void
     setRelPosition(Qwt3D::Tuple relMin,
@@ -62,7 +62,7 @@ public:
 
 private:
     Qwt3D::Label caption_;
-    Qwt3D::ParallelEpiped geometry() const { return pe_; }
+    // Qwt3D::ParallelEpiped geometry() const { return pe_; }
     void setGeometryInternal();
 
     Qwt3D::ParallelEpiped pe_;

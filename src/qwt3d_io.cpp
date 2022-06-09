@@ -44,20 +44,14 @@ IO::Entry::Entry(QString const &s, Function f) : fmt(s)
     iofunc = w.clone();
 }
 
-IO::FormatCompare::FormatCompare(IO::Entry const &e)
-{
-    e_ = e;
-}
+IO::FormatCompare::FormatCompare(IO::Entry const &e) : e_(e) { }
 
 bool IO::FormatCompare::operator()(IO::Entry const &e)
 {
     return (e.fmt == e_.fmt);
 }
 
-IO::FormatCompare2::FormatCompare2(QString s)
-{
-    s_ = s;
-}
+IO::FormatCompare2::FormatCompare2(QString s) : s_(s) { }
 
 bool IO::FormatCompare2::operator()(IO::Entry const &e)
 {
@@ -292,7 +286,7 @@ bool Plot3D::saveVector(QString const &fileName, QString const &format, VectorWr
 {
     if (format == "EPS" || format == "EPS_GZ" || format == "PS" || format == "PS_GZ"
         || format == "PDF" || format == "SVG" || format == "PGF") {
-        VectorWriter *gl2ps = (VectorWriter *)IO::outputHandler(format);
+        VectorWriter *gl2ps = dynamic_cast<VectorWriter *>(IO::outputHandler(format));
         if (gl2ps) {
             gl2ps->setSortMode(sortmode);
             gl2ps->setTextMode(text);

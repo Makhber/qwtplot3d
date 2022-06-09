@@ -19,9 +19,9 @@ public:
 
 private:
     //! Provides new NativeReader object.
-    IO::Functor *clone() const { return new NativeReader(*this); }
+    IO::Functor *clone() const override { return new NativeReader(*this); }
     //! Performs actual input
-    bool operator()(Plot3D *plot, QString const &fname);
+    bool operator()(Plot3D *plot, QString const &fname) override;
     static const char *magicstring;
     double minz_, maxz_;
     bool collectInfo(FILE *&file, QString const &fname, unsigned &xmesh, unsigned &ymesh,

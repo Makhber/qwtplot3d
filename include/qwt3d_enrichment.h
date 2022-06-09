@@ -48,10 +48,10 @@ class QWT3D_EXPORT VertexEnrichment : public Enrichment
 {
 public:
     VertexEnrichment() : Qwt3D::Enrichment() { }
-    virtual Enrichment *
-    clone() const = 0; //!< The derived class should give back a new Derived(something) here
+    virtual Enrichment *clone() const
+            override = 0; //!< The derived class should give back a new Derived(something) here
     virtual void draw(Qwt3D::Triple const &) = 0; //!< Overwrite this
-    virtual TYPE type() const
+    virtual TYPE type() const override
     {
         return Qwt3D::Enrichment::VERTEXENRICHMENT;
     } //!< This gives VERTEXENRICHMENT

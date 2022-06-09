@@ -10,10 +10,13 @@ CoordinateSystem::CoordinateSystem(Triple first, Triple second, COORDSTYLE st)
     setLineSmooth(true);
     init(first, second);
 
-    setAxesColor(RGBA(0, 0, 0, 1));
-    setGridLinesColor(RGBA(0.2, 0.2, 0.2, 1));
+    Qwt3D::RGBA rgba0001 = RGBA(0, 0, 0, 1);
+    setAxesColor(rgba0001);
+    Qwt3D::RGBA rgba2221 = RGBA(0.2, 0.2, 0.2, 1);
+    setGridLinesColor(rgba2221);
     setNumberFont("Courier", 12);
-    setNumberColor(RGBA(0, 0, 0));
+    Qwt3D::RGBA rgba000 = RGBA(0, 0, 0);
+    setNumberColor(rgba000);
     setLabelFont("Courier", 14, QFont::Bold);
     setGridLines(false, false);
 }
@@ -137,8 +140,8 @@ void CoordinateSystem::chooseAxes()
         if (style() != NOCOORD)
             attach(&axes[i]);
 
-        beg[i] = World2ViewPort(axes[i].begin());
-        end[i] = World2ViewPort(axes[i].end());
+        beg[i] = World2ViewPort(axes[i].first());
+        end[i] = World2ViewPort(axes[i].last());
         src[i] = Tuple(beg[i].x, beg[i].y);
         src[axes.size() + i] = Tuple(end[i].x, end[i].y);
 
@@ -160,8 +163,8 @@ void CoordinateSystem::chooseAxes()
     int choice_y = -1;
     int choice_z = -1;
 
-    int other_x = -1;
-    int other_y = -1;
+    int other_x {};
+    int other_y {};
     int other_z = -1;
 
     // traverse convex hull
@@ -247,14 +250,14 @@ void CoordinateSystem::chooseAxes()
         left = (beg[choice_z].x < beg[other_z].x || end[choice_z].x < end[other_z].x) ? true
                                                                                       : false;
 
-        if (axes[choice_z].begin() == axes[choice_x].begin()
-            || axes[choice_z].begin() == axes[choice_x].end()
-            || axes[choice_z].begin() == axes[choice_y].begin()
-            || axes[choice_z].begin() == axes[choice_y].end()
-            || axes[choice_z].end() == axes[choice_x].begin()
-            || axes[choice_z].end() == axes[choice_x].end()
-            || axes[choice_z].end() == axes[choice_y].begin()
-            || axes[choice_z].end() == axes[choice_y].end()
+        if (axes[choice_z].first() == axes[choice_x].first()
+            || axes[choice_z].first() == axes[choice_x].last()
+            || axes[choice_z].first() == axes[choice_y].first()
+            || axes[choice_z].first() == axes[choice_y].last()
+            || axes[choice_z].last() == axes[choice_x].first()
+            || axes[choice_z].last() == axes[choice_x].last()
+            || axes[choice_z].last() == axes[choice_y].first()
+            || axes[choice_z].last() == axes[choice_y].last()
 
         ) {
             autoDecorateExposedAxis(axes[choice_z], left);
@@ -276,7 +279,7 @@ void CoordinateSystem::chooseAxes()
 
 void CoordinateSystem::autoDecorateExposedAxis(Axis &ax, bool left)
 {
-    Triple diff = World2ViewPort(ax.end()) - World2ViewPort(ax.begin());
+    Triple diff = World2ViewPort(ax.last()) - World2ViewPort(ax.first());
 
     diff = Triple(diff.x, diff.y, 0); // projection
 
@@ -298,10 +301,11 @@ void CoordinateSystem::autoDecorateExposedAxis(Axis &ax, bool left)
         if (diff.x >= 0 && diff.y >= 0 && sina < SQRT_2) // 0..Pi/4
         {
             ax.setNumberAnchor(BottomCenter);
-        } else if (diff.x >= 0 && diff.y >= 0 && !left) // octant 2
+        } /*else if (diff.x >= 0 && diff.y >= 0 && !left) // octant 2
         {
             ax.setNumberAnchor(CenterRight);
-        } else if (diff.x <= 0 && diff.y >= 0 && sina >= SQRT_2) // octant 3
+        }*/
+        else if (diff.x <= 0 && diff.y >= 0 && sina >= SQRT_2) // octant 3
         {
             ax.setNumberAnchor(CenterRight);
         } else if (diff.x <= 0 && diff.y >= 0) // octant 4
@@ -324,7 +328,7 @@ void CoordinateSystem::autoDecorateExposedAxis(Axis &ax, bool left)
     {
         if (diff.x >= 0 && diff.y >= 0 && sina <= SQRT_2) {
             ax.setNumberAnchor(TopCenter);
-        } else if (diff.x >= 0 && diff.y >= 0 && !left) {
+        } else if (diff.x >= 0 && diff.y >= 0) {
             ax.setNumberAnchor(CenterLeft);
         } else if (diff.x <= 0 && diff.y >= 0 && sina >= SQRT_2) {
             ax.setNumberAnchor(CenterLeft);
@@ -342,7 +346,7 @@ void CoordinateSystem::autoDecorateExposedAxis(Axis &ax, bool left)
     }
 }
 
-void CoordinateSystem::setPosition(Triple first, Triple second)
+void CoordinateSystem::setPosition(const Triple &first, const Triple &second)
 {
     first_ = first;
     second_ = second;
@@ -366,13 +370,13 @@ void CoordinateSystem::adjustLabels(int val)
         axes[i].adjustLabel(val);
 }
 
-void CoordinateSystem::setAutoScale(bool val)
+void CoordinateSystem::setAutoScale(const bool &val)
 {
     for (unsigned i = 0; i != axes.size(); ++i)
         axes[i].setAutoScale(val);
 }
 
-void CoordinateSystem::setAxesColor(RGBA val)
+void CoordinateSystem::setAxesColor(const RGBA &val)
 {
     for (unsigned i = 0; i != axes.size(); ++i)
         axes[i].setColor(val);
@@ -396,7 +400,7 @@ void CoordinateSystem::setNumberFont(QFont const &font)
         axes[i].setNumberFont(font);
 }
 
-void CoordinateSystem::setNumberColor(RGBA val)
+void CoordinateSystem::setNumberColor(const RGBA &val)
 {
     for (unsigned i = 0; i != axes.size(); ++i)
         axes[i].setNumberColor(val);
@@ -419,7 +423,7 @@ void CoordinateSystem::setLabelFont(QString const &family, int pointSize, int we
     setLabelFont(QFont(family, pointSize, weight, italic));
 }
 
-void CoordinateSystem::setLabelColor(RGBA val)
+void CoordinateSystem::setLabelColor(const RGBA &val)
 {
     for (unsigned i = 0; i != axes.size(); ++i)
         axes[i].setLabelColor(val);
@@ -540,9 +544,9 @@ void CoordinateSystem::drawMinorGridLines()
     glEnd();
 }
 
-void CoordinateSystem::drawMajorGridLines(Axis &a0, Axis &a1)
+void CoordinateSystem::drawMajorGridLines(const Axis &a0, const Axis &a1)
 {
-    Triple d = a1.begin() - a0.begin();
+    Triple d = a1.first() - a0.first();
 
     for (unsigned int i = 0; i != a0.majorPositions().size(); ++i) {
         glVertex3d(a0.majorPositions()[i].x, a0.majorPositions()[i].y, a0.majorPositions()[i].z);
@@ -551,9 +555,9 @@ void CoordinateSystem::drawMajorGridLines(Axis &a0, Axis &a1)
     }
 }
 
-void CoordinateSystem::drawMinorGridLines(Axis &a0, Axis &a1)
+void CoordinateSystem::drawMinorGridLines(const Axis &a0, const Axis &a1)
 {
-    Triple d = a1.begin() - a0.begin();
+    Triple d = a1.first() - a0.first();
 
     for (unsigned int i = 0; i != a0.minorPositions().size(); ++i) {
         glVertex3d(a0.minorPositions()[i].x, a0.minorPositions()[i].y, a0.minorPositions()[i].z);

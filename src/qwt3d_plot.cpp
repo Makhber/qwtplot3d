@@ -11,15 +11,25 @@ using namespace Qwt3D;
 /*!
   This should be the first call in your derived classes constructors.
 */
-Plot3D::Plot3D(QWidget *parent) : QOpenGLWidget(parent)
+Plot3D::Plot3D(QWidget *parent)
+    : QOpenGLWidget(parent),
+      xRot_(0.0),
+      yRot_(0.0),
+      zRot_(0.0),
+      xShift_(0.0),
+      yShift_(0.0),
+      zShift_(0.0),
+      zoom_(1),
+      xScale_(1.0),
+      yScale_(1.0),
+      zScale_(1.0),
+      xVPShift_(0.0),
+      yVPShift_(0.0),
+      lastMouseMovePosition_(QPoint(0, 0))
 {
     initializedGL_ = false;
     renderpixmaprequest_ = false;
-    xRot_ = yRot_ = zRot_ = 0.0; // default object rotation
 
-    xShift_ = yShift_ = zShift_ = xVPShift_ = yVPShift_ = 0.0;
-    xScale_ = yScale_ = zScale_ = 1.0;
-    zoom_ = 1;
     ortho_ = true;
     plotstyle_ = FILLEDMESH;
     userplotstyle_p = 0;
@@ -30,14 +40,15 @@ Plot3D::Plot3D(QWidget *parent) : QOpenGLWidget(parent)
     smoothdatamesh_p = false;
     actualData_p = 0;
 
-    lastMouseMovePosition_ = QPoint(0, 0);
     mpressed_ = false;
     mouse_input_enabled_ = true;
 
     setPolygonOffset(0.5);
-    setMeshColor(RGBA(0.0, 0.0, 0.0));
+    Qwt3D::RGBA rgba0000 = RGBA(0.0, 0.0, 0.0);
+    setMeshColor(rgba0000);
     setMeshLineWidth(1);
-    setBackgroundColor(RGBA(1.0, 1.0, 1.0, 1.0));
+    Qwt3D::RGBA rgba1111 = RGBA(1.0, 1.0, 1.0, 1.0);
+    setBackgroundColor(rgba1111);
 
     displaylists_p = std::vector<GLuint>(DisplayListSize);
     for (unsigned k = 0; k != displaylists_p.size(); ++k) {
@@ -53,8 +64,8 @@ Plot3D::Plot3D(QWidget *parent) : QOpenGLWidget(parent)
     kbd_input_enabled_ = true;
 
     setFocusPolicy(Qt::StrongFocus);
-    assignMouse(Qt::LeftButton, MouseState(Qt::LeftButton, Qt::ShiftModifier), Qt::LeftButton,
-                MouseState(Qt::LeftButton, Qt::AltModifier),
+    assignMouse(MouseState(Qt::LeftButton), MouseState(Qt::LeftButton, Qt::ShiftModifier),
+                MouseState(Qt::LeftButton), MouseState(Qt::LeftButton, Qt::AltModifier),
                 MouseState(Qt::LeftButton, Qt::AltModifier),
                 MouseState(Qt::LeftButton, Qt::AltModifier | Qt::ShiftModifier),
                 MouseState(Qt::LeftButton, Qt::AltModifier | Qt::ControlModifier),
@@ -221,7 +232,7 @@ void Plot3D::resizeGL(int w, int h)
 /*!
         Create a coordinate system with generating corners beg and end
 */
-void Plot3D::createCoordinateSystem(Triple beg, Triple end)
+void Plot3D::createCoordinateSystem(const Triple &beg, const Triple &end)
 {
     if (beg != coordinates_p.first() || end != coordinates_p.second())
         coordinates_p.init(beg, end);
@@ -249,12 +260,12 @@ void Plot3D::showColorLegend(bool show)
     update();
 }
 
-void Plot3D::setMeshColor(RGBA rgba)
+void Plot3D::setMeshColor(const RGBA &rgba)
 {
     meshcolor_ = rgba;
 }
 
-void Plot3D::setBackgroundColor(RGBA rgba)
+void Plot3D::setBackgroundColor(const RGBA &rgba)
 {
     bgcolor_ = rgba;
 }

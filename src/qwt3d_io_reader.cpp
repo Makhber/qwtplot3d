@@ -196,7 +196,7 @@ bool NativeReader::operator()(Plot3D *plot, QString const &fname)
     /* close the file */
     fclose(file);
 
-    ((SurfacePlot *)plot)->loadFromData(data, xmesh, ymesh, minx, maxx, miny, maxy);
+    dynamic_cast<SurfacePlot *>(plot)->loadFromData(data, xmesh, ymesh, minx, maxx, miny, maxy);
     deleteData(data, xmesh);
 
     return true;

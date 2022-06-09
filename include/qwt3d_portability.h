@@ -10,7 +10,7 @@
 
 namespace Qwt3D {
 
-#define QWT3DLOCAL8BIT(qstring) ((const char *)(qstring.toLocal8Bit()))
+#define QWT3DLOCAL8BIT(qstring) static_cast<const char *>(qstring.toLocal8Bit())
 
 const Qt::TextFlag SingleLine = Qt::TextSingleLine;
 
@@ -23,7 +23,10 @@ public:
     {
     }
 
-    MouseState(Qt::MouseButton mb, Qt::KeyboardModifiers km = Qt::NoModifier) : mb_(mb), km_(km) { }
+    explicit MouseState(Qt::MouseButton mb, Qt::KeyboardModifiers km = Qt::NoModifier)
+        : mb_(mb), km_(km)
+    {
+    }
 
     bool operator==(const MouseState &ms) const { return mb_ == ms.mb_ && km_ == ms.km_; }
 

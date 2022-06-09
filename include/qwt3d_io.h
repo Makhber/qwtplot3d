@@ -67,11 +67,11 @@ private:
     {
     public:
         //! Performs actual input
-        Functor *clone() const { return new Wrapper(*this); }
+        Functor *clone() const override { return new Wrapper(*this); }
         //! Creates a Wrapper object from a function pointer
         explicit Wrapper(Function h) : hdl(h) { }
         //! Returns a pointer to the wrapped function
-        bool operator()(Plot3D *plot, QString const &fname)
+        bool operator()(Plot3D *plot, QString const &fname) override
         {
             return (hdl) ? (*hdl)(plot, fname) : false;
         }
@@ -131,8 +131,8 @@ public:
     void setQuality(int val);
 
 private:
-    IO::Functor *clone() const { return new PixmapWriter(*this); }
-    bool operator()(Plot3D *plot, QString const &fname);
+    IO::Functor *clone() const override { return new PixmapWriter(*this); }
+    bool operator()(Plot3D *plot, QString const &fname) override;
     QString fmt_;
     int quality_;
 };

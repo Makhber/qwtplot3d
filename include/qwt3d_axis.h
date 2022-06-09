@@ -18,19 +18,20 @@ class QWT3D_EXPORT Axis : public Drawable
 
 public:
     Axis(); //!< Constructs standard axis
-    Axis(Qwt3D::Triple beg, Qwt3D::Triple end); //!< Constructs a new axis with specified limits
+    Axis(const Qwt3D::Triple &beg,
+         const Qwt3D::Triple &end); //!< Constructs a new axis with specified limits
     virtual ~Axis(); // dtor
 
-    virtual void draw(); //!< Draws axis
+    virtual void draw() override; //!< Draws axis
 
     void setPosition(const Qwt3D::Triple &beg, const Qwt3D::Triple &end); //!< Positionate axis
-    void position(Qwt3D::Triple &beg, Qwt3D::Triple &end) const
+    void position(Qwt3D::Triple &fir, Qwt3D::Triple &las) const
     {
-        beg = beg_;
-        end = end_;
+        fir = beg_;
+        las = end_;
     } //!< Returns axis' position
-    Qwt3D::Triple begin() const { return beg_; } //!< Returns axis' beginning position
-    Qwt3D::Triple end() const { return end_; } //!< Returns axis' ending position
+    Qwt3D::Triple first() const { return beg_; } //!< Returns axis' beginning position
+    Qwt3D::Triple last() const { return end_; } //!< Returns axis' ending position
     double length() const { return (end_ - beg_).length(); } //!< Returns axis' length
 
     void setTicLength(double majorl, double minorl); //!< Sets tics lengths in world coordinates
@@ -53,7 +54,7 @@ public:
 
     void setLabelString(QString const &name); //!< Sets label content
     void setLabelPosition(const Qwt3D::Triple &pos, Qwt3D::ANCHOR);
-    void setLabelColor(Qwt3D::RGBA col);
+    void setLabelColor(const Qwt3D::RGBA &col);
     void setLabel(bool d) { drawLabel_ = d; } //!< Turns label drawing on or off
     void adjustLabel(int val)
     {
@@ -66,7 +67,7 @@ public:
     void setScale(Scale *item);
     void setNumbers(bool d) { drawNumbers_ = d; } //!< Turns number drawing on or off
     bool numbers() const { return drawNumbers_; } //!< Returns, if number drawing is on or off
-    void setNumberColor(Qwt3D::RGBA col); //!< Sets the color for axes numbers
+    void setNumberColor(const Qwt3D::RGBA &col); //!< Sets the color for axes numbers
     Qwt3D::RGBA numberColor() const { return numbercolor_; } //!< Returns the color for axes numbers
     //! Sets font for numbering
     void setNumberFont(QString const &family, int pointSize, int weight = QFont::Normal,
@@ -121,7 +122,7 @@ private:
     void init();
     void drawBase();
     void drawTics();
-    void drawTicLabel(Qwt3D::Triple Pos, int mtic);
+    void drawTicLabel(const Qwt3D::Triple &Pos, int mtic);
     Qwt3D::Triple drawTic(Qwt3D::Triple nadir, double length);
     void drawLabel();
     bool prepTicCalculation(Triple &startpoint);
