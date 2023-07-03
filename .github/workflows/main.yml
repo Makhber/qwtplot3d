@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-22.04
     name: Ubuntu
     env:
-      QT_VERSION: 6.4.0
+      QT_VERSION: 6.5.1
 
     steps:
       - name: Checkout
@@ -21,10 +21,13 @@ jobs:
           key: ${{ runner.os }}-Qt-Cache-${{ env.QT_VERSION }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: ${{ steps.cache-qt.outputs.cache-hit }}
+          dir: ${{ github.workspace }}/Qt
+          archives: qtbase icu
+          aqtversion: '==3.1.*'
 
       - name: Install prerequisties
         run: |
@@ -53,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2, 6.4.0]
+        qt_version: [5.15.2, 6.5.1]
 
     steps:
       - name: Checkout
@@ -67,10 +70,13 @@ jobs:
           key: ${{ runner.os }}-Qt-Cache-${{ matrix.qt_version }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.qt_version }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: ${{ steps.cache-qt.outputs.cache-hit }}
+          dir: ${{ github.workspace }}/Qt
+          archives: qtbase icu
+          aqtversion: '==3.1.*'
 
       - name: Setup NuGet Credentials
         run: |
@@ -134,10 +140,10 @@ jobs:
           cmake --build build
 
   macos:
-    runs-on: macos-12
+    runs-on: macos-13
     name: macos
     env:
-      QT_VERSION: 6.4.0
+      QT_VERSION: 6.5.1
 
     steps:
       - name: Checkout
@@ -153,10 +159,13 @@ jobs:
           key: ${{ runner.os }}-Qt-Cache-${{ env.QT_VERSION }}
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ env.QT_VERSION }}
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          cache: ${{ steps.cache-qt.outputs.cache-hit }}
+          dir: ${{ github.workspace }}/Qt
+          archives: qtbase icu
+          aqtversion: '==3.1.*'
 
       - name: Install prerequisties
         run: |
