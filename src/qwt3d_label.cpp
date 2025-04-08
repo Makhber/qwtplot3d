@@ -132,7 +132,11 @@ void Label::update()
     p.drawText(0, r.height() - fm.descent() - 1, text_);
     p.end();
     buf_ = pm_.toImage();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    tex_ = buf_.flipped();
+#else
     tex_ = buf_.mirrored();
+#endif
 }
 
 /**

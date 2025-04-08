@@ -81,13 +81,20 @@ AxesMainWindow::AxesMainWindow(QWidget *parent) : DummyBase(parent)
     plot->coordinates()->setLineSmooth(true);
     smoothBox->setDown(true);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    plot->addAction("&Standard", QKeySequence("ALT+S"), this, SLOT(standardItems()));
+    plot->addAction("&Imaginary", QKeySequence("ALT+I"), this, SLOT(complexItems()));
+    plot->addAction("&Letter", QKeySequence("ALT+L"), this, SLOT(letterItems()));
+    plot->addAction("&Time", QKeySequence("ALT+T"), this, SLOT(timeItems()));
+    plot->addAction("&Log", QKeySequence("ALT+C"), this, SLOT(customScale()));
+#else
     QMenu *Items = menuBar()->addMenu("Item");
     Items->addAction("&Standard", this, SLOT(standardItems()), QKeySequence("ALT+S"));
     Items->addAction("&Imaginary", this, SLOT(complexItems()), QKeySequence("ALT+I"));
     Items->addAction("&Letter", this, SLOT(letterItems()), QKeySequence("ALT+L"));
     Items->addAction("&Time", this, SLOT(timeItems()), QKeySequence("ALT+T"));
     Items->addAction("&Log", this, SLOT(customScale()), QKeySequence("ALT+C"));
-
+#endif
     plot->makeCurrent();
     plot->updateData();
     plot->update();
