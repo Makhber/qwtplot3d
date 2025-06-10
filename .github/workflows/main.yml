@@ -4,10 +4,18 @@ on: [pull_request,push]
 
 jobs:
   Ubuntu:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-${{ matrix.os_ver }}
     name: Ubuntu
-    env:
-      QT_VERSION: 6.9.0
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os_ver: "24.04"
+            QT_VER: "5.15.2"
+          - os_ver: "24.04"
+            QT_VER: "6.9.1"
+          - os_ver: "24.04-arm"
+            QT_VER: "6.9.1"
 
     steps:
       - name: Checkout
@@ -18,12 +26,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-Qt-Cache-${{ env.QT_VERSION }}
+          key: ${{ runner.os }}-Qt-Cache-${{ matrix.QT_VER }}-${{ matrix.os_ver }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ env.QT_VERSION }}
+          version: ${{ matrix.QT_VER }}
           cache: ${{ steps.cache-qt.outputs.cache-hit }}
           dir: ${{ github.workspace }}/Qt
           archives: qtbase icu
@@ -48,14 +56,23 @@ jobs:
           make -j$(nproc) -C build
 
   MSVC:
-    name: MSVC_Qt_${{ matrix.qt_version }}
-    runs-on: windows-latest
+    name: MSVC_Qt_${{ matrix.QT_VER }}_${{ matrix.os_ver }}
+    runs-on: windows-${{ matrix.os_ver }}
     env:
       VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2, 6.9.0]
+        include:
+          - os_ver: "2025"
+            QT_VER: "5.15.2"
+            triplet: x64-windows
+          - os_ver: "2025"
+            QT_VER: "6.9.1"
+            triplet: x64-windows
+          - os_ver: "11-arm"
+            QT_VER: "6.9.1"
+            triplet: arm64-windows
 
     steps:
       - name: Checkout
@@ -66,12 +83,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/Qt
-          key: ${{ runner.os }}-Qt-Cache-${{ matrix.qt_version }}
+          key: ${{ runner.os }}-Qt-Cache-${{ matrix.QT_VER }}-${{ matrix.os_ver }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: ${{ matrix.qt_version }}
+          version: ${{ matrix.QT_VER }}
           cache: ${{ steps.cache-qt.outputs.cache-hit }}
           dir: ${{ github.workspace }}/Qt
           archives: qtbase icu
@@ -86,7 +103,7 @@ jobs:
 
       - name: vcpkg package restore
         run: |
-          vcpkg install gl2ps --triplet x64-windows
+          vcpkg install gl2ps --triplet ${{ matrix.triplet }}
 
       - name: Configuring
         run: |
@@ -101,12 +118,32 @@ jobs:
           cmake --build build --config Release -- -maxCpuCount
 
   MinGW-w64:
-    runs-on: windows-2022
-    name: MSYS2 ${{ matrix.msystem }}
+    runs-on: windows-${{ matrix.os_ver }}
+    name: MSYS2 ${{ matrix.msystem }} Qt ${{ matrix.QT_VER }}
     strategy:
       fail-fast: false
       matrix:
-        msystem: [UCRT64, CLANG64]
+        include:
+          - msystem: UCRT64
+            QT_VER: 5
+            os_ver: "2025"
+            new_msys2: false
+          - msystem: UCRT64
+            QT_VER: 6
+            os_ver: "2025"
+            new_msys2: false
+          - msystem: CLANG64
+            QT_VER: 5
+            os_ver: "2025"
+            new_msys2: false
+          - msystem: CLANG64
+            QT_VER: 6
+            os_ver: "2025"
+            new_msys2: false
+          - msystem: CLANGARM64
+            QT_VER: 6
+            os_ver: "11-arm"
+            new_msys2: true
     defaults:
       run:
         shell: msys2 {0}
@@ -119,13 +156,13 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}
-          release: false
+          release: ${{ matrix.new_msys2 }}
           update: true
           pacboy: >-
             cmake:p
             ninja:p
             cc:p
-            qt6-base:p
+            qt${{ matrix.QT_VER }}-base:p
             gl2ps:p
 
       - name: Configuring
