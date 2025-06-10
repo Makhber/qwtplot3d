@@ -56,12 +56,14 @@ elseif( Qt5_FOUND )
 endif()
 
 if( ${QT_VERSION_MAJOR} VERSION_GREATER_EQUAL 6 )
-  find_package( Qt6 COMPONENTS Gui OpenGLWidgets REQUIRED )
+  find_package( Qt6 REQUIRED COMPONENTS Gui OPTIONAL_COMPONENTS OpenGLWidgets )
 else()
-  find_package( Qt5 COMPONENTS Gui OpenGL REQUIRED )
+  find_package( Qt5 REQUIRED COMPONENTS Gui PTIONAL_COMPONENTS OpenGL )
 endif()
 
-find_package( OpenGL COMPONENTS OpenGL REQUIRED )
+if(Qt6OpenGLWidgets_FOUND OR Qt5OpenGL_FOUND)
+  find_package( OpenGL COMPONENTS OpenGL REQUIRED )
+endif()
 
 find_package( gl2ps )
 
@@ -128,13 +130,12 @@ add_library( qwtplot3d ${SRCS} ${HEADERS} )
 target_link_libraries( qwtplot3d PUBLIC
   Qt::Core
   Qt::Gui
-  OpenGL::GLU
   )
 
-if( Qt6_FOUND )
-  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGLWidgets )
-else()
-  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGL )
+if( Qt6OpenGLWidgets_FOUND )
+  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGLWidgets OpenGL::GLU )
+elseif( Qt5OpenGL_FOUND )
+  target_link_libraries( qwtplot3d PUBLIC Qt::OpenGL OpenGL::GLU )
 endif()
 
 target_include_directories( qwtplot3d PUBLIC include ${CMAKE_CURRENT_BINARY_DIR} )
